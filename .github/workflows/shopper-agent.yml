@@ -1,13 +1,12 @@
-name: Update Customer Loyalty Agent
+name: Update Shopper Agent (Cora)
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'src/app/agents/customerLoyaltyAgent_initializer.py'
-      - 'src/prompts/CustomerLoyaltyAgentPrompt.txt'
-      - 'src/app/tools/discountLogic.py'
+      - 'src/app/agents/shopperAgent_initializer.py'
+      - 'src/prompts/ShopperAgentPrompt.txt'
   workflow_dispatch:
 
 jobs:
@@ -42,10 +41,10 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Run Updated Customer Loyalty Agent Initializer
+    - name: Run Updated Shopper Agent Initializer
       working-directory: ./src
       run: |
-        python app/agents/customerLoyaltyAgent_initializer.py
+        python app/agents/shopperAgent_initializer.py
     
     - name: Clean up .env file
       if: always()

@@ -1,13 +1,13 @@
-name: Update Customer Loyalty Agent
+name: Update Interior Design Agent
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'src/app/agents/customerLoyaltyAgent_initializer.py'
-      - 'src/prompts/CustomerLoyaltyAgentPrompt.txt'
-      - 'src/app/tools/discountLogic.py'
+      - 'src/app/agents/interiorDesignAgent_initializer.py'
+      - 'src/prompts/InteriorDesignAgentPrompt.txt'
+      - 'src/app/tools/imageCreationTool.py'
   workflow_dispatch:
 
 jobs:
@@ -42,10 +42,10 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Run Updated Customer Loyalty Agent Initializer
+    - name: Run Updated Interior Design Agent Initializer
       working-directory: ./src
       run: |
-        python app/agents/customerLoyaltyAgent_initializer.py
+        python app/agents/interiorDesignAgent_initializer.py
     
     - name: Clean up .env file
       if: always()
