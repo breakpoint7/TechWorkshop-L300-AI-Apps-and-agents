@@ -1,5 +1,7 @@
 import os
 import sys
+from opentelemetry.instrumentation.openai_v2 import OpenAIInstrumentor
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from typing import List, Callable, Set, Any, Dict
 from azure.ai.agents.models import (
@@ -28,10 +30,11 @@ import time
 # # Enable Azure Monitor tracing
 application_insights_connection_string = os.environ["APPLICATIONINSIGHTS_CONNECTION_STRING"]
 configure_azure_monitor(connection_string=application_insights_connection_string)
-# OpenAIInstrumentor().instrument()
+OpenAIInstrumentor().instrument()
+os.environ["AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED"] = "true"
 
-# scenario = os.path.basename(__file__)
-# tracer = trace.get_tracer(__name__)
+#scenario = os.path.basename(__file__)
+#tracer = trace.get_tracer(__name__)
 
 # Increase thread pool size for better concurrency
 _executor = ThreadPoolExecutor(max_workers=8)

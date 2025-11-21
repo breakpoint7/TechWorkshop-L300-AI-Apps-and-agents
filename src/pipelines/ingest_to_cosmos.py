@@ -5,16 +5,24 @@ from azure.cosmos import CosmosClient, PartitionKey
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import AzureError
 from dotenv import load_dotenv
+from pathlib import Path #rr
 
-load_dotenv()
+# Load .env from the src directory (parent of pipelines)
+env_path = Path(__file__).parent.parent / '.env'
+print(f"Looking for .env at: {env_path}")
+print(f"File exists: {env_path.exists()}")
+load_dotenv(dotenv_path=env_path)
 
 # CONFIGURATIONS - Replace with your actual values
 COSMOS_ENDPOINT = os.environ.get("COSMOS_ENDPOINT")
 COSMOS_KEY = os.environ.get("COSMOS_KEY")
 DATABASE_NAME = os.environ.get("DATABASE_NAME")
 CONTAINER_NAME = os.environ.get("CONTAINER_NAME")
-CSV_FILE = r"data/updated_product_catalog(in).csv"  #Placeholder here to avoid rerunning the code
 
+print(f"COSMOS_ENDPOINT loaded: {COSMOS_ENDPOINT}")
+print(f"DATABASE_NAME loaded: {DATABASE_NAME}")
+
+CSV_FILE = r"data/updated_product_catalog(in).csv"
 
 # 1. Read data from CSV
 df = pd.read_csv(CSV_FILE, encoding='cp1252') 
