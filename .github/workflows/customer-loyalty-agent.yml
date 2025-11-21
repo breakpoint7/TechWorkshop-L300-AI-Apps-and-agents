@@ -35,6 +35,24 @@ jobs:
       run: |
         echo "${{ secrets.ENV }}" > .env
     
+    - name: Debug - Check .env file contents
+      working-directory: ./src
+      run: |
+        echo "=== First 50 lines of .env ==="
+        head -n 50 .env
+        echo ""
+        echo "=== Line count ==="
+        wc -l .env
+        echo ""
+        echo "=== Checking for APPLICATIONINSIGHTS_CONNECTION_STRING ==="
+        grep "APPLICATIONINSIGHTS_CONNECTION_STRING" .env || echo "NOT FOUND IN FILE"
+        echo ""
+        echo "=== Show with special characters visible ==="
+        cat -A .env | grep -A 2 "APPLICATIONINSIGHTS" || echo "NOT FOUND"
+        echo ""
+        echo "=== Check if variable loads into environment ==="
+        python3 -c "from dotenv import load_dotenv; import os; load_dotenv(); print('APPLICATIONINSIGHTS_CONNECTION_STRING:', os.environ.get('APPLICATIONINSIGHTS_CONNECTION_STRING', 'NOT FOUND'))"
+    
     - name: Azure Login
       uses: azure/login@v2
       with:
