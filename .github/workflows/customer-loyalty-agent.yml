@@ -30,6 +30,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
+    - name: Create .env file from secret
+      working-directory: ./src
+      run: |
+        echo "${{ secrets.ENV }}" > .env
+    
     - name: Azure Login
       uses: azure/login@v2
       with:
@@ -37,16 +42,14 @@ jobs:
     
     - name: Run Customer Loyalty Agent Initializer
       working-directory: ./src
-      env:
-        AZURE_AI_AGENT_ENDPOINT: ${{ secrets.AZURE_AI_AGENT_ENDPOINT }}
-        AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME: ${{ secrets.AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME }}
-        customer_loyalty: ${{ secrets.CUSTOMER_LOYALTY_AGENT_ID }}
-        AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
-        gpt_deployment: ${{ secrets.GPT_DEPLOYMENT }}
-        AZURE_OPENAI_KEY: ${{ secrets.AZURE_OPENAI_KEY }}
-        APPLICATIONINSIGHTS_CONNECTION_STRING: ${{ secrets.APPLICATIONINSIGHTS_CONNECTION_STRING }}
       run: |
         python app/agents/customerLoyaltyAgent_initializer.py
+    
+    - name: Clean up .env file
+      if: always()
+      working-directory: ./src
+      run: |
+        rm -f .env
     
     - name: Azure Logout
       if: always()
